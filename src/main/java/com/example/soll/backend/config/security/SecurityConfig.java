@@ -12,11 +12,15 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.soll.backend.config.security.filter.JwtAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
+
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
@@ -36,9 +40,24 @@ public class SecurityConfig {
                                 // JWT 토큰 기반의 인증을 사용하기 위해 무상태 세션 정책 사용
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
+    }
+
+    // React localhost:3000에 대해 Cors 허용 설정
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource(){
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+
+        corsConfiguration.addAllowedOrigin("http://localhost:3000");
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**",corsConfiguration);
+        return source;
     }
 }
