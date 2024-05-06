@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.soll.backend.common.utils.JwtUtil;
 import com.example.soll.backend.dto.request.AuthRequest;
-import com.example.soll.backend.dto.response.LoginResponse;
+import com.example.soll.backend.dto.response.AuthResponse;
 import com.example.soll.backend.entitiy.Member;
 import com.example.soll.backend.repository.MemberRepository;
 
@@ -26,7 +26,7 @@ public class AuthService {
 
     // 로그인 로직
     @Transactional
-    public LoginResponse authenticate(AuthRequest login) {
+    public AuthResponse authenticate(AuthRequest login) {
         Member member = memberRepository.findByEmail(login.email()).get();
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -40,7 +40,7 @@ public class AuthService {
         // JWT 토큰 생성
         String jwtToken = jwtUtil.generateToken(login.email());
 
-        return LoginResponse.builder()
+        return AuthResponse.builder()
                 .accessToken(jwtToken)
                 .build();
     } 
