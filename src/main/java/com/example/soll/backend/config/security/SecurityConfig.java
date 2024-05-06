@@ -27,22 +27,22 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authorizeHttpRequest ->
-                        authorizeHttpRequest
-                                // UnAuth Area
-                                .requestMatchers("/auth/**").permitAll()
-                                // Others
-                                .anyRequest().authenticated()
+            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(authorizeHttpRequest ->
+                    authorizeHttpRequest
+                            // UnAuth Area
+                            .requestMatchers("/auth/**").permitAll()
+                            // Others
+                            .anyRequest().authenticated()
                 )
-                .sessionManagement((sessionManagement) ->
-                        sessionManagement
-                                // JWT 토큰 기반의 인증을 사용하기 위해 무상태 세션 정책 사용
-                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+            .sessionManagement((sessionManagement) ->
+                    sessionManagement
+                            // JWT 토큰 기반의 인증을 사용하기 위해 무상태 세션 정책 사용
+                            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .authenticationProvider(authenticationProvider)
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

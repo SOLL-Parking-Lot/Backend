@@ -27,7 +27,7 @@ public class ParkingLotController {
     private final TMapService tMapService;
 
     // 주소를 기반으로 근처에 있는 주차장을 모두 가져오는 Controller
-    @GetMapping("/around/parking/{address}")
+    @GetMapping("/around/{address}")
     public ResponseEntity<List<AroundParkingTotalResponse>> getParkingAllInformation(@PathVariable("address") String address){
 
         List<AroundParkingTotalResponse> aroundParkingTotalResponses = new ArrayList<>();
