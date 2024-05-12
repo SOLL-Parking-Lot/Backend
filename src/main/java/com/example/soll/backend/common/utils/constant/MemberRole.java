@@ -8,6 +8,7 @@ import java.util.Arrays;
 @Getter
 @RequiredArgsConstructor
 public enum MemberRole {
+    //역할 생성
     ADMIN("관리자"),
     MEMBER("회원"),
     WITHDRAW("탈퇴");

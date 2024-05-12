@@ -1,6 +1,7 @@
 package com.example.soll.backend.dto.response;
 
 import com.example.soll.backend.entitiy.ParkingInfo;
+
 import lombok.NoArgsConstructor;
 
 // 모든 주차장 정보를 포함하는 레코드

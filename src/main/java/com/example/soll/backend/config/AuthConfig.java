@@ -37,6 +37,7 @@ public class AuthConfig {
                 .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
     }
 
+    //spring security에서 사용자 정보를 가져오는 빈 생성
     @Bean
     public UserDetailsService userDetailsService() {
         return (username) -> memberRepository.findByEmail(username)
@@ -45,6 +46,7 @@ public class AuthConfig {
                 });
     }
 
+    //사용자 인증을 처리하는 빈
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();

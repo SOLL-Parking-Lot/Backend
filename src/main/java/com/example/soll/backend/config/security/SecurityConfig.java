@@ -24,15 +24,16 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    //필터체인을 구성하는 메소드
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(AbstractHttpConfigurer::disable)
+            .csrf(AbstractHttpConfigurer::disable)// 보호를 비활성, 요청의 의한 인가 규칙 설정
             .authorizeHttpRequests(authorizeHttpRequest ->
                     authorizeHttpRequest
-                            // UnAuth Area
+                            // UnAuth Area 인증 필요한 url패턴 설정
                             .requestMatchers("/auth/**").permitAll()
-                            // Others
+                            // Others 나머지 요청은 인증이 필요하도록 설정
                             .anyRequest().authenticated()
                 )
             .sessionManagement((sessionManagement) ->
@@ -40,6 +41,7 @@ public class SecurityConfig {
                             // JWT 토큰 기반의 인증을 사용하기 위해 무상태 세션 정책 사용
                             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
+            //구성을 설정해서 클라이언트의 요청을 허용
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authenticationProvider(authenticationProvider)
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -54,7 +56,7 @@ public class SecurityConfig {
         corsConfiguration.addAllowedOrigin("http://localhost:3000");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
-        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setAllowCredentials(true);// credentials 허용 여부 설정
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**",corsConfiguration);

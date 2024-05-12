@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 
+//예외 발생시 클라이언트로 반환될 에러 응답 정의
 @Getter
 public class ErrorResponse {
 

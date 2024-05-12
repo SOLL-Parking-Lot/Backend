@@ -35,6 +35,7 @@ public class JwtAuthenticationToken implements Authentication {
         return email;
     }
 
+    //사용자 인증 여부 
     @Override
     public boolean isAuthenticated() {
         return isAuthenticated;

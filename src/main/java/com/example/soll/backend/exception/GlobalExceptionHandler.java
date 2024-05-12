@@ -8,12 +8,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    //예외가 발생하면 예외를 처리
     @ExceptionHandler(APIJsonParsingException.class)
     protected ResponseEntity<ErrorResponse> handleJsonParsingException(APIJsonParsingException ex){
         ErrorCode errorCode = ex.getErrorCode();
         return handleExceptionInternal(errorCode);
     }
 
+    //APIJsonParsingException의 ErrorCode를 사용하여 적절한 HTTP 응답을 생성
     private ResponseEntity<ErrorResponse> handleExceptionInternal(ErrorCode errorCode){
         return ResponseEntity
                 .status(errorCode.getHttpStatus().value())
