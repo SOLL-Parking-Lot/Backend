@@ -4,8 +4,8 @@ import lombok.Builder;
 
 @Builder
 public record LocationRequest(
-        String originX,
-        String originY,
-        String destinationX,
-        String destinationY) {
+        double startLatitude,
+        double startLongitude,
+        double endLatitude,
+        double endLongitude) {
 }

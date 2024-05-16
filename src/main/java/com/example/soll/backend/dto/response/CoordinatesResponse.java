@@ -5,7 +5,7 @@ import lombok.Builder;
 @Builder
 public record CoordinatesResponse(
         // 위도
-        String latitude,
+        double latitude,
         // 경도
-        String longitude){
+        double longitude){
 }

@@ -3,7 +3,7 @@ package com.example.soll.backend.dto.response;
 import lombok.Builder;
 
 @Builder
-public record CurrentParkingResponse(
+public record CurrentParkingLotResponse(
     // 총 주차면수
     int totalCapacity,
     // 현재 주차된 수
