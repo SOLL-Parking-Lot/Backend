@@ -19,6 +19,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -46,6 +47,14 @@ public class Member extends BaseEntity implements UserDetails{
     @Column(name = "MEMBER_ROLE", nullable = false)
     @ColumnDefault(value = "'MEMBER'")
     private MemberRole role;
+
+    @Builder
+    public Member(String nickname, String password, String email, MemberRole role) {
+        this.nickname = nickname;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

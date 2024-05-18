@@ -1,12 +1,16 @@
 package com.example.soll.backend.config.security.filter;
 
 import com.example.soll.backend.common.JwtAuthenticationToken;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.example.soll.backend.common.utils.JwtUtil;
+import com.example.soll.backend.service.TokenService;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,10 +20,12 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
     private final JwtUtil jwtUtil;
-    public JwtAuthenticationFilter(JwtUtil jwtUtil) {
+    private final TokenService tokenService;
+
+    public JwtAuthenticationFilter(JwtUtil jwtUtil, TokenService tokenService) {
         this.jwtUtil = jwtUtil;
+        this.tokenService = tokenService;
     }
 
     //http 요청에 대해 한 번 씩 호출되는 메서드

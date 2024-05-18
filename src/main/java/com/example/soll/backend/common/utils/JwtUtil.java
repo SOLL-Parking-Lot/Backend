@@ -14,7 +14,7 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    @lombok.Value("${jwt.secret}")
+    @Value("${jwt.secret}")
     private String secret;
 
     @Value("${jwt.expirationMs}")
