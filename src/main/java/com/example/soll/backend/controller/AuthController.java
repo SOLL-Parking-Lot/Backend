@@ -39,6 +39,7 @@ public class AuthController {
     
     @PostMapping("/sign-out")
     public ResponseEntity<String> logout(@RequestHeader("Authorization") String token) {
+        System.out.println(token);
         if (token.startsWith("Bearer ")) {
             String accessToken = token.substring(7);
             tokenService.addToBlacklist(accessToken);

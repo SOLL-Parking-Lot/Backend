@@ -3,9 +3,6 @@ package com.example.soll.backend.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,7 +42,7 @@ public class AuthService {
 
 
         // JWT 토큰 생성
-        String jwtToken = jwtUtil.generateToken(login.email());
+        String jwtToken = jwtUtil.generateToken(login.email(),member.getNickname());
 
         return AuthResponse.builder()
                 .accessToken(jwtToken)
