@@ -47,8 +47,9 @@ public class JwtUtil {
     }
 
     //지정된 이메일 주소를 사용 jwt 생성
-    public String generateToken(String email) {
+    public String generateToken(String email,String nickname) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("nickname", nickname);
         return createToken(claims, email);
     }
 
