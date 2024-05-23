@@ -1,20 +1,25 @@
 package com.example.soll.backend.entitiy;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
 
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicInsert
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
+@Builder
 public class CustomParkingLot extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CUSTOM_PARKING_ID")
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MEMBER_ID", nullable = false)
+    private Member member;  // Custom 추가한 사용자
     @Column(name = "CUSTOM_PARKINGLOT_NAME")
     private String parkingLotName; // 주차장명
     @Column(name = "CUSTOM_CUSTOM_INFO")

@@ -60,6 +60,11 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- Java 8 data/time type 다루기 위해 Module 변환 -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+		</dependency>
 		<!-- JJWT -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>

@@ -4,6 +4,7 @@ import com.example.soll.backend.dto.request.CoordinatesRequest;
 import com.example.soll.backend.dto.request.LocationRequest;
 import com.example.soll.backend.dto.response.CurrentParkingLotResponse;
 import com.example.soll.backend.dto.response.DistanceResponse;
+import com.example.soll.backend.entitiy.CustomParkingLot;
 import com.example.soll.backend.entitiy.NationalParkingLot;
 import com.example.soll.backend.entitiy.SeoulParkingLot;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +22,17 @@ public class ParkingLotService {
     private final SeoulParkingLotService seoulParkingLotService;
     private final CurrentParkingLotService currentParkingLotService;
     private final TMapService tMapService;
+    private final MemberService memberService;
+    private final CustomParkingLotService customParkingLotService;
 
-    public List<HashMap<String, Object>> getAroundParkingLotProcess(CoordinatesRequest coordinatesRequest) {
+    private List<DistanceResponse> sortAllParkingByDistanceProcess(CoordinatesRequest coordinatesRequest){
+
+        Long loginMemberId = memberService.getLoginMemberProcess().getId();
 
         List<DistanceResponse> distanceResponses = new ArrayList<>();
         List<NationalParkingLot> allNationalList = nationalParkingLotService.getAllNationalParkingLotProcess();
         List<SeoulParkingLot> allSeoulList = seoulParkingLotService.getAllSeoulParkingLotProcess();
+        List<CustomParkingLot> allCustomList = customParkingLotService.getAllCustomParkingLotByMemberIdProcess(loginMemberId);
 
         for (NationalParkingLot nationalParkingLot : allNationalList) {
             LocationRequest request = new LocationRequest(
@@ -58,14 +64,46 @@ public class ParkingLotService {
                     )
             );
         }
+        for (CustomParkingLot customParkingLot : allCustomList) {
+            LocationRequest request = new LocationRequest(
+                    coordinatesRequest.latitude(),
+                    coordinatesRequest.longitude(),
+                    customParkingLot.getLatitude(),
+                    customParkingLot.getLongitude()
+            );
+            distanceResponses.add(
+                    new DistanceResponse(
+                            customParkingLot.getId(),
+                            "Custom",
+                            getDistanceProcess(request)
+                    )
+            );
+        }
         distanceResponses.sort(Comparator.comparingDouble(DistanceResponse::distance));
+        return distanceResponses;
+    }
+    public List<HashMap<String, Object>> getParkingLotByLevelProcess(CoordinatesRequest coordinatesRequest,int level) {
+
+        List<DistanceResponse> sortByDistanceList = sortAllParkingByDistanceProcess(coordinatesRequest);
         return getParkingLotByType(
+                false,
                 coordinatesRequest,
-                distanceResponses.subList(0, Math.min(5, distanceResponses.size()))
+                sortByDistanceList.subList(0, Math.min(level * 25, sortByDistanceList.size()))
+        );
+
+    }
+
+    public List<HashMap<String, Object>> getAroundParkingLotProcess(CoordinatesRequest coordinatesRequest) {
+
+        List<DistanceResponse> sortByDistanceList = sortAllParkingByDistanceProcess(coordinatesRequest);
+        return getParkingLotByType(
+                true,
+                coordinatesRequest,
+                sortByDistanceList.subList(0, Math.min(5, sortByDistanceList.size()))
         );
     }
 
-    private List<HashMap<String, Object>> getParkingLotByType(CoordinatesRequest coordinatesRequest, List<DistanceResponse> distanceResponses) {
+    private List<HashMap<String, Object>> getParkingLotByType(boolean isContainsRoute ,CoordinatesRequest coordinatesRequest, List<DistanceResponse> distanceResponses) {
         List<HashMap<String, Object>> mapList = new ArrayList<>();
 
         for (DistanceResponse entity : distanceResponses) {
@@ -75,13 +113,15 @@ public class ParkingLotService {
                 NationalParkingLot nationalParkingLot = nationalParkingLotService.getNationalParkingLotByIdProcess(entity.parkingLotId());
                 parkingLotMap.put("type", "National");
                 parkingLotMap.put("parking", nationalParkingLot);
-                parkingLotMap.put("route",
-                    tMapService.getAllRouteInformation(
-                            new LocationRequest(coordinatesRequest.latitude(),coordinatesRequest.longitude(),
-                                    nationalParkingLot.getLatitude(), nationalParkingLot.getLongitude()
+                if (isContainsRoute) {
+                    parkingLotMap.put("route",
+                            tMapService.getAllRouteInformation(
+                                    new LocationRequest(coordinatesRequest.latitude(),coordinatesRequest.longitude(),
+                                            nationalParkingLot.getLatitude(), nationalParkingLot.getLongitude()
+                                    )
                             )
-                    )
-                );
+                    );
+                }
 
             } else if (entity.type().equals("Seoul")) {
                 SeoulParkingLot seoulParkingLot = seoulParkingLotService.getSeoulParkingLotByIdProcess(entity.parkingLotId());
@@ -91,13 +131,28 @@ public class ParkingLotService {
                 parkingLotMap.put("type", "Seoul");
                 parkingLotMap.put("parking", seoulParkingLot);
                 parkingLotMap.put("currentParking", response);
-                parkingLotMap.put("route",
-                        tMapService.getAllRouteInformation(
-                                new LocationRequest(coordinatesRequest.latitude(),coordinatesRequest.longitude(),
-                                        seoulParkingLot.getLatitude(), seoulParkingLot.getLongitude()
-                                )
-                        )
-                );
+                if (isContainsRoute){
+                    parkingLotMap.put("route",
+                            tMapService.getAllRouteInformation(
+                                    new LocationRequest(coordinatesRequest.latitude(),coordinatesRequest.longitude(),
+                                            seoulParkingLot.getLatitude(), seoulParkingLot.getLongitude()
+                                    )
+                            )
+                    );
+                }
+            }else if (entity.type().equals("Custom")){
+                CustomParkingLot customParkingLot = customParkingLotService.getCustomParkingLotByIdProcess(entity.parkingLotId());
+                parkingLotMap.put("type", "Custom");
+                parkingLotMap.put("parking", customParkingLot);
+                if (isContainsRoute) {
+                    parkingLotMap.put("route",
+                            tMapService.getAllRouteInformation(
+                                    new LocationRequest(coordinatesRequest.latitude(),coordinatesRequest.longitude(),
+                                            customParkingLot.getLatitude(), customParkingLot.getLongitude()
+                                    )
+                            )
+                    );
+                }
             }
             mapList.add(parkingLotMap);
         }
@@ -117,7 +172,7 @@ public class ParkingLotService {
         return dist / 1000;
     }
 
-    private static double deg2rad(double deg) {
+    private double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
     }
 
