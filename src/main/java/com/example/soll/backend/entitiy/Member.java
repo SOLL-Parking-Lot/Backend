@@ -29,6 +29,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 public class Member extends BaseEntity implements UserDetails{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MEMBER_ID")

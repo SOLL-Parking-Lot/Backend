@@ -14,6 +14,11 @@ public class GlobalExceptionHandler {
         ErrorCode errorCode = ex.getErrorCode();
         return handleExceptionInternal(errorCode);
     }
+    @ExceptionHandler(UserNotFoundException.class)
+    protected ResponseEntity<ErrorResponse> handleUSerNotFoundException(UserNotFoundException ex){
+        ErrorCode errorCode = ex.getErrorCode();
+        return handleExceptionInternal(errorCode);
+    }
 
     //APIJsonParsingException의 ErrorCode를 사용하여 적절한 HTTP 응답을 생성
     private ResponseEntity<ErrorResponse> handleExceptionInternal(ErrorCode errorCode){
