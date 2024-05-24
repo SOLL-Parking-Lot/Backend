@@ -4,6 +4,7 @@ import com.example.soll.backend.dto.request.CoordinatesRequest;
 import com.example.soll.backend.dto.request.LocationRequest;
 import com.example.soll.backend.dto.response.CurrentParkingLotResponse;
 import com.example.soll.backend.dto.response.DistanceResponse;
+import com.example.soll.backend.dto.response.ParkingLotResponse;
 import com.example.soll.backend.entitiy.CustomParkingLot;
 import com.example.soll.backend.entitiy.NationalParkingLot;
 import com.example.soll.backend.entitiy.SeoulParkingLot;
@@ -13,6 +14,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -102,6 +106,14 @@ public class ParkingLotService {
                 sortByDistanceList.subList(0, Math.min(5, sortByDistanceList.size()))
         );
     }
+
+    //주차장 ID,주차장 명,주소,주차장 타입을 리스트로 반환
+    public List<ParkingLotResponse> getParkingLotKeywordList(String keyword){
+        return Stream.concat(nationalParkingLotService.getNationalParkingLotList(keyword).stream()
+        ,seoulParkingLotService.getSeoulParkingLotList(keyword).stream()).collect(Collectors.toList());
+    }
+
+
 
     private List<HashMap<String, Object>> getParkingLotByType(boolean isContainsRoute ,CoordinatesRequest coordinatesRequest, List<DistanceResponse> distanceResponses) {
         List<HashMap<String, Object>> mapList = new ArrayList<>();

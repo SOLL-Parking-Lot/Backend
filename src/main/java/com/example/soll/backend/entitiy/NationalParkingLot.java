@@ -50,4 +50,9 @@ public class NationalParkingLot{
     @Column(name = "FEE_INFO")
     private String feeInfo; // 요금정보
 
+    //도로명 주소가 있으면 도로명 주소 없으면 지번 주소 반환
+    public String getEffectiveAddress() {
+        return (roadNameAddress != null && !roadNameAddress.isEmpty()) ? roadNameAddress : lotNumberAddress;
+    }
+
 }
