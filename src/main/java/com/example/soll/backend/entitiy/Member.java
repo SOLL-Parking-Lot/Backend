@@ -90,8 +90,4 @@ public class Member extends BaseEntity implements UserDetails{
     public boolean isEnabled() {
         return true;
     }
-
-    public String getNickname() {
-        return this.nickname;
-    }
 }
