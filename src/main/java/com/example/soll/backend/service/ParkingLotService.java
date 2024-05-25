@@ -2,8 +2,10 @@ package com.example.soll.backend.service;
 
 import com.example.soll.backend.dto.request.CoordinatesRequest;
 import com.example.soll.backend.dto.request.LocationRequest;
+import com.example.soll.backend.dto.request.ParkingLotRequest;
 import com.example.soll.backend.dto.response.CurrentParkingLotResponse;
 import com.example.soll.backend.dto.response.DistanceResponse;
+import com.example.soll.backend.dto.response.ParkingLotDetailResponse;
 import com.example.soll.backend.dto.response.ParkingLotResponse;
 import com.example.soll.backend.entitiy.CustomParkingLot;
 import com.example.soll.backend.entitiy.NationalParkingLot;
@@ -14,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -112,8 +113,13 @@ public class ParkingLotService {
         return Stream.concat(nationalParkingLotService.getNationalParkingLotList(keyword).stream()
         ,seoulParkingLotService.getSeoulParkingLotList(keyword).stream()).collect(Collectors.toList());
     }
-
-
+    // 주차장 상세정보 반환
+    public ParkingLotDetailResponse getParkingLotDetail(ParkingLotRequest parkingLotRequest) {
+        if(parkingLotRequest.type().equals("National")){
+               return nationalParkingLotService.getParkingLotDetail(parkingLotRequest.parkingLotId());
+        }
+        return seoulParkingLotService.getParkingLotDetail(parkingLotRequest.parkingLotId());
+    }
 
     private List<HashMap<String, Object>> getParkingLotByType(boolean isContainsRoute ,CoordinatesRequest coordinatesRequest, List<DistanceResponse> distanceResponses) {
         List<HashMap<String, Object>> mapList = new ArrayList<>();

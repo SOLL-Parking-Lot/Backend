@@ -2,7 +2,6 @@ package com.example.soll.backend.config.security.filter;
 
 import com.example.soll.backend.common.JwtAuthenticationToken;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;

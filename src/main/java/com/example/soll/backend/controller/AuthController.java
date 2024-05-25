@@ -25,7 +25,6 @@ public class AuthController {
     
     @PostMapping("/sign-in")
     public ResponseEntity<AuthResponse> authenticate(@RequestBody @Valid AuthRequest login) {
-        System.out.println(login);
         AuthResponse loginResponse = authService.authenticate(login);
         return ResponseEntity.ok()
                 .body(loginResponse);
