@@ -1,5 +1,6 @@
 package com.example.soll.backend.service;
 
+import com.example.soll.backend.dto.response.ParkingLotDetailResponse;
 import com.example.soll.backend.dto.response.ParkingLotResponse;
 import com.example.soll.backend.entitiy.NationalParkingLot;
 import com.example.soll.backend.repository.NationalParkingLotRepository;
@@ -40,8 +41,35 @@ public class NationalParkingLotService {
         }
     }
 
+    @Transactional(readOnly = true)
+    public ParkingLotDetailResponse getParkingLotDetail(Long id) {
+        System.out.println(id);
+        return convertToDetailDTO(nationalParkingLotRepository.findById(id).orElse(null));
+    }
+
+    private ParkingLotDetailResponse convertToDetailDTO(NationalParkingLot nationalParkingLot){
+        return ParkingLotDetailResponse.builder()
+               .parkingLotName(nationalParkingLot.getParkingLotName())
+               .longitude(nationalParkingLot.getLongitude())
+               .latitude(nationalParkingLot.getLatitude())
+               .address(nationalParkingLot.getEffectiveAddress())
+               .weekdayStartTime(nationalParkingLot.getWeekdayStartTime())
+               .weekdayEndTime(nationalParkingLot.getWeekdayEndTime())
+               .weekendStartTime(nationalParkingLot.getSaturdayStartTime())
+               .weekendEndTime(nationalParkingLot.getSaturdayEndTime())
+               .holidayStartTime(nationalParkingLot.getHolidayStartTime())
+               .holidayEndTime(nationalParkingLot.getHolidayEndTime())
+               .basicFee(0)
+               .basicTime(0)
+               .saturdayFeeType(nationalParkingLot.getFeeInfo())
+               .holidayFeeType(nationalParkingLot.getFeeInfo())
+               .phoneNumber(nationalParkingLot.getPhoneNumber())
+               .totalParkingSpace(nationalParkingLot.getTotalParkingSpace())
+               .parkingType("National")
+               .build();
+    }
+
      private ParkingLotResponse convertToDTO(NationalParkingLot nationalParkingLot) {
-        System.out.println(nationalParkingLot);
         return ParkingLotResponse.builder()
         .id(nationalParkingLot.getId())
         .parkinglotName(nationalParkingLot.getParkingLotName())
@@ -49,5 +77,4 @@ public class NationalParkingLotService {
         .type("National")
         .build();
     }
-
 }

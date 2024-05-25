@@ -1,5 +1,6 @@
 package com.example.soll.backend.service;
 
+import com.example.soll.backend.dto.response.ParkingLotDetailResponse;
 import com.example.soll.backend.dto.response.ParkingLotResponse;
 import com.example.soll.backend.dto.response.SeoulParkingLotResponse;
 import com.example.soll.backend.entitiy.NationalParkingLot;
@@ -50,6 +51,33 @@ public class SeoulParkingLotService {
             throw e; // 또는 throw new CustomException("Custom error message", e);
         }
     }
+    @Transactional(readOnly = true)
+    public ParkingLotDetailResponse getParkingLotDetail(Long id) {
+        System.out.println(id);
+        return convertToDetailDTO(seoulParkingLotRepository.findById(id).orElse(null));
+    }
+
+    private ParkingLotDetailResponse convertToDetailDTO(SeoulParkingLot seoulParkingLot){
+        return ParkingLotDetailResponse.builder()
+               .parkingLotName(seoulParkingLot.getParkingLotName())
+               .longitude(seoulParkingLot.getLongitude())
+               .latitude(seoulParkingLot.getLatitude())
+               .address(seoulParkingLot.getAddress())
+               .weekdayStartTime(seoulParkingLot.getWeekdayStartTime())
+               .weekdayEndTime(seoulParkingLot.getWeekdayEndTime())
+               .weekendStartTime(seoulParkingLot.getWeekendStartTime())
+               .weekendEndTime(seoulParkingLot.getWeekendEndTime())
+               .holidayStartTime(seoulParkingLot.getHolidayStartTime())
+               .holidayEndTime(seoulParkingLot.getHolidayEndTime())
+               .basicFee(seoulParkingLot.getBasicFee())
+               .basicTime(seoulParkingLot.getBasicTime())
+               .saturdayFeeType(seoulParkingLot.getSaturdayFeeType())
+               .holidayFeeType(seoulParkingLot.getHolidayFeeType())
+               .phoneNumber(seoulParkingLot.getPhoneNumber())
+               .totalParkingSpace(seoulParkingLot.getTotalParkingSpace())
+               .parkingType("Seoul")
+               .build();
+    }
 
      private ParkingLotResponse convertToDTO(SeoulParkingLot seoulParkingLot) {
         System.out.println(seoulParkingLot);
@@ -60,4 +88,5 @@ public class SeoulParkingLotService {
         .type("Seoul")
         .build();
     }
+
 }

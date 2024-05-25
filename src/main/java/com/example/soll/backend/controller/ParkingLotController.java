@@ -1,6 +1,8 @@
 package com.example.soll.backend.controller;
 
 import com.example.soll.backend.dto.request.CoordinatesRequest;
+import com.example.soll.backend.dto.request.ParkingLotRequest;
+import com.example.soll.backend.dto.response.ParkingLotDetailResponse;
 import com.example.soll.backend.dto.response.ParkingLotResponse;
 import com.example.soll.backend.dto.response.SeoulParkingLotResponse;
 import com.example.soll.backend.entitiy.NationalParkingLot;
@@ -54,7 +56,13 @@ public class ParkingLotController {
     //주차장 이름 및 주소 검색
     @GetMapping("/search")
     public ResponseEntity<List<ParkingLotResponse>> getParkingLotKeywordList(@RequestParam String keyword) {
-        System.out.println(keyword);
         return ResponseEntity.ok(parkingLotService.getParkingLotKeywordList(keyword));
+    }
+
+    //주차장 상세보기
+    @GetMapping("/detail")
+    public ResponseEntity<ParkingLotDetailResponse> getParkingLotDetail(@RequestBody ParkingLotRequest parkingLotRequest ) {
+        System.out.println(parkingLotRequest);
+        return ResponseEntity.ok(parkingLotService.getParkingLotDetail(parkingLotRequest));
     }   
 }
