@@ -1,6 +1,8 @@
 package com.example.soll.backend.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -11,6 +13,7 @@ import com.example.soll.backend.dto.request.AuthRequest;
 import com.example.soll.backend.dto.request.SignupRequest;
 import com.example.soll.backend.dto.response.AuthResponse;
 import com.example.soll.backend.service.AuthService;
+import com.example.soll.backend.service.MemberService;
 import com.example.soll.backend.service.TokenService;
 
 import jakarta.validation.Valid;
@@ -22,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
     private final AuthService authService;
     private final TokenService tokenService;
+    private final MemberService memberService;
     
     @PostMapping("/sign-in")
     public ResponseEntity<AuthResponse> authenticate(@RequestBody @Valid AuthRequest login) {
@@ -44,5 +48,11 @@ public class AuthController {
             tokenService.addToBlacklist(accessToken);
         }
         return ResponseEntity.ok("로그아웃 되었습니다.");
+    }
+
+    @GetMapping("/validation/{email}")
+    public ResponseEntity<Boolean> validationEmail(@PathVariable("email") String email) {
+        Boolean checkResult = memberService.validation(email);
+        return ResponseEntity.ok(checkResult);
     }
 }
