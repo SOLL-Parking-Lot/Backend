@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -25,5 +26,10 @@ public class MemberService {
         }else{
             throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND_EXCEPTION);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public boolean validation(String email) {
+        return memberRepository.existsByEmail(email);
     }
 }
