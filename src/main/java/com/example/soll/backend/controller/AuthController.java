@@ -7,12 +7,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.soll.backend.dto.request.AuthRequest;
+import com.example.soll.backend.dto.request.PasswordChangeRequest;
 import com.example.soll.backend.dto.request.SignupRequest;
+import com.example.soll.backend.dto.request.VerifyCodeRequest;
 import com.example.soll.backend.dto.response.AuthResponse;
+import com.example.soll.backend.entitiy.Mail;
 import com.example.soll.backend.service.AuthService;
+import com.example.soll.backend.service.MailService;
 import com.example.soll.backend.service.MemberService;
 import com.example.soll.backend.service.TokenService;
 
@@ -26,6 +31,7 @@ public class AuthController {
     private final AuthService authService;
     private final TokenService tokenService;
     private final MemberService memberService;
+    private final MailService mailService;
     
     @PostMapping("/sign-in")
     public ResponseEntity<AuthResponse> authenticate(@RequestBody @Valid AuthRequest login) {
@@ -55,4 +61,31 @@ public class AuthController {
         Boolean checkResult = memberService.validation(email);
         return ResponseEntity.ok(checkResult);
     }
+
+    // 해당 메일로 인증번호 발송 
+    @PostMapping("/verify-code")
+    public ResponseEntity<String> sendEmail(@RequestParam(name = "email") String email) {
+        Mail dto = mailService.createMailAndSendVerificationCode(email);
+        mailService.mailSend(dto);
+        return ResponseEntity.ok("인증번호를 발송 하였습니다.");
+    }
+
+    // 보낸 인증번호가 맞는지 확인
+    @PostMapping("/verify")
+    public ResponseEntity<Boolean> verifyCode(@RequestBody VerifyCodeRequest verifyCodeRequest) {
+        boolean isValid = mailService.verifyCode(verifyCodeRequest.email(),verifyCodeRequest.code());
+        return ResponseEntity.ok(isValid);
+    }
+
+    // 비밀번호 변경
+    @PostMapping("/password")
+    public ResponseEntity<String> changePassword(@RequestBody PasswordChangeRequest request) {
+        mailService.changePassword(request.email(),request.newPassword());
+        return ResponseEntity.ok("비밀번호를 변경하였습니다.");
+    }
+    
+
+    
+
+    
 }
