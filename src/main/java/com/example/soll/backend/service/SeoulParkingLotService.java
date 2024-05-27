@@ -53,7 +53,6 @@ public class SeoulParkingLotService {
     }
     @Transactional(readOnly = true)
     public ParkingLotDetailResponse getParkingLotDetail(Long id) {
-        System.out.println(id);
         return convertToDetailDTO(seoulParkingLotRepository.findById(id).orElse(null));
     }
 
