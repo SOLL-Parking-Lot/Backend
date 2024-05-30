@@ -17,11 +17,11 @@ public class SeoulFavorite extends BaseEntity {
     @Column(name = "SEOUL_PARKING_FAVORIATE_ID")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "MEMBER_ID", nullable = false)
     private Member member;  // 즐겨찾기 추가한 사용자
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "SEOUL_PARKINGLOT_ID", nullable = false)
     private SeoulParkingLot seoulParkingLot;  // 해당 서울 추자장
 

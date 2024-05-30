@@ -17,11 +17,11 @@ public class NationalFavoriate extends BaseEntity{
     @Column(name = "NATIONAL_PARKING_FAVORIATE_ID")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "MEMBER_ID", nullable = false)
     private Member member;  // 즐겨찾기 추가한 사용자
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "NATIONAL_PARKINGLOT_ID", nullable = false)
     private NationalParkingLot nationalParkingLot;  // 해당 전국 추자장
 

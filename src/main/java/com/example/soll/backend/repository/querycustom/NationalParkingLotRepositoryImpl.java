@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class NationalParkingLotRepositoryImpl implements NationalParkingLotRepositoryCustom{
-        private final JPAQueryFactory jpaQueryFactory;
+    private final JPAQueryFactory jpaQueryFactory;
     QNationalParkingLot nationalParkingLot = QNationalParkingLot.nationalParkingLot;
 
     @Override

@@ -84,8 +84,4 @@ public class AuthController {
         return ResponseEntity.ok("비밀번호를 변경하였습니다.");
     }
     
-
-    
-
-    
 }
