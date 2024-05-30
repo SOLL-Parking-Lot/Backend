@@ -18,6 +18,7 @@ public class SeoulParkingLotRepositoryCustomImpl implements SeoulParkingLotRepos
     private final JPAQueryFactory jpaQueryFactory;
     QSeoulParkingLot seoulParkingLot = QSeoulParkingLot.seoulParkingLot;
 
+
     @Override
     public List<SeoulParkingLot> findTop5SeoulParkingLotBy(String keyword) {
         String keywordNoSpaces = keyword.replaceAll("\\s+", "").toLowerCase();
