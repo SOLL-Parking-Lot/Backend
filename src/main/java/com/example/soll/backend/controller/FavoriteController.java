@@ -18,7 +18,7 @@ public class FavoriteController {
     private final FavoriteService favoriteService;
 
     @GetMapping("/is-bookmark")
-    public ResponseEntity<Boolean> getParkingLotIsBookmark(
+    public ResponseEntity<Long> getParkingLotIsBookmark(
             @RequestParam("type") String type,
             @RequestParam("parkingId") Long parkingId){
         return ResponseEntity.ok(favoriteService.checkParkingLotIsBookmark(

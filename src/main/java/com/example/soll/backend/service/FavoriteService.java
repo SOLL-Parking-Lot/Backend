@@ -137,16 +137,19 @@ public class FavoriteService {
     }
 
     @Transactional(readOnly = true)
-    public boolean checkParkingLotIsBookmark(String type,Long memberId,Long parkingId){
+    public Long checkParkingLotIsBookmark(String type,Long memberId,Long parkingId){
         if (type.equals("National")){
             Optional<NationalFavoriate> targetEntity = nationalFavoriteRepository.findByMemberIdAndNationalParkingLotId(memberId,parkingId);
-            return targetEntity.isPresent();
+            if(targetEntity.isPresent()){
+                return targetEntity.get().getId();
+            }
         }else if (type.equals("Seoul")){
             Optional<SeoulFavorite> targetEntity = seoulFavoriteRepository.findByMemberIdAndSeoulParkingLotId(memberId,parkingId);
-            return targetEntity.isPresent();
-        }else{
-            return true;
+            if(targetEntity.isPresent()){
+                return targetEntity.get().getId();
+            }
         }
+        return null;
     }
 
 }
