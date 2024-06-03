@@ -1,11 +1,13 @@
 package com.example.soll.backend.controller;
 
 import com.example.soll.backend.dto.request.CoordinatesRequest;
+import com.example.soll.backend.dto.response.CurrentParkingLotResponse;
 import com.example.soll.backend.dto.response.ParkingLotDetailResponse;
 import com.example.soll.backend.dto.response.ParkingLotResponse;
 import com.example.soll.backend.dto.response.SeoulParkingLotResponse;
 import com.example.soll.backend.entitiy.NationalParkingLot;
 import com.example.soll.backend.entitiy.SeoulParkingLot;
+import com.example.soll.backend.service.CurrentParkingLotService;
 import com.example.soll.backend.service.NationalParkingLotService;
 import com.example.soll.backend.service.ParkingLotService;
 import com.example.soll.backend.service.SeoulParkingLotService;
@@ -23,6 +25,12 @@ public class ParkingLotController {
     private final ParkingLotService parkingLotService;
     private final NationalParkingLotService nationalParkingLotService;
     private final SeoulParkingLotService seoulParkingLotService;
+    private final CurrentParkingLotService currentParkingLotService;
+
+    @GetMapping("/current")
+    public ResponseEntity<CurrentParkingLotResponse> getCurrentParkingLot(@RequestParam("address") String address) {
+        return ResponseEntity.ok(currentParkingLotService.getCurrentParkingByAPI(address));
+    }
 
     // 좌표를 기반으로 근처에 있는 주차장을 모두 가져오는 Controller
     @PostMapping("/around")
