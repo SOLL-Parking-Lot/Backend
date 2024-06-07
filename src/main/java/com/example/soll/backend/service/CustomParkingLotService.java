@@ -35,6 +35,7 @@ public class CustomParkingLotService {
                 .customInfo(request.getCustomInfo())
                 .feeType(request.getFeeType())
                 .address(request.getAddress())
+                .phoneNumber(request.getPhoneNumber())
                 .latitude(coordinatesResponse.longitude())
                 .longitude(coordinatesResponse.latitude())
                 .member(member).build();
