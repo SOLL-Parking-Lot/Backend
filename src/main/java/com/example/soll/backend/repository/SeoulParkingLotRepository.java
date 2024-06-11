@@ -6,6 +6,9 @@ import com.example.soll.backend.repository.querycustom.SeoulParkingLotRepository
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface SeoulParkingLotRepository extends JpaRepository<SeoulParkingLot, Long>, SeoulParkingLotRepositoryCustom {
+    Optional<SeoulParkingLot> findByAddress(String address);
 }
