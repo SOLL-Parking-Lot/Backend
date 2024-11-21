@@ -3,7 +3,6 @@ package com.example.soll.backend.service;
 import com.example.soll.backend.dto.response.ParkingLotDetailResponse;
 import com.example.soll.backend.dto.response.ParkingLotResponse;
 import com.example.soll.backend.dto.response.SeoulParkingLotResponse;
-import com.example.soll.backend.entitiy.NationalParkingLot;
 import com.example.soll.backend.entitiy.SeoulParkingLot;
 import com.example.soll.backend.repository.SeoulParkingLotRepository;
 import lombok.RequiredArgsConstructor;
